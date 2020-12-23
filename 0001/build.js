@@ -1,5 +1,6 @@
 const sltr = require("@fal-works/s-l-t-r");
 const builder = require("@fal-works/bundle-helper/lib/build/browser-app");
+const watch = require("./scripts/watch");
 
 // ----------------------------------------------------------------------------
 
@@ -60,5 +61,14 @@ const dev = builder.command(devConfig);
 
 // ----------------------------------------------------------------------------
 
-const router = sltr.tools.createRouter({ build, dev }, dev);
-router.run(process.argv[2]);
+const { run, cmdEx } = sltr;
+const CLI_ARG = process.argv[2];
+
+if (CLI_ARG === "watch") sltr.config.setQuiet();
+const startWatch = cmdEx(
+  async () => watch.createWatcher(() => run(dev)),
+  "watch"
+);
+
+const router = sltr.tools.createRouter({ build, dev, watch: startWatch }, dev);
+router.run(CLI_ARG);

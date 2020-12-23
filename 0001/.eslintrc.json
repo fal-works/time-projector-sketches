@@ -48,7 +48,7 @@
     },
     {
       "files": [
-        "build.js"
+        "build.js", "scripts/*"
       ],
       "env": {
         "es6": true,
@@ -56,7 +56,10 @@
       },
       "parserOptions": {
         "ecmaVersion": 2020
-      }
+      },
+       "rules": {
+         "no-unused-vars": "off"
+       }
     }
   ]
 }

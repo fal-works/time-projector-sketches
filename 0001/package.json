@@ -10,16 +10,18 @@
     "@fal-works/bundle-helper": "0.2.3",
     "@fal-works/mere-file-transformer": "^0.1.1",
     "@fal-works/p5-scaler": "^0.2.0",
-    "@fal-works/s-l-t-r": "^0.4.0",
+    "@fal-works/s-l-t-r": "^0.5.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "@types/p5": "^0.9.1",
     "@typescript-eslint/eslint-plugin": "4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
+    "chokidar": "^3.4.3",
     "eslint": "7.16.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
+    "replacestream": "^4.0.3",
     "rollup": "^2.35.1",
     "rollup-plugin-typescript2": "^0.29.0",
     "terser": "^5.5.1",
@@ -36,6 +38,7 @@
   "scripts": {
     "dev": "node build.js dev",
     "build": "node build.js build",
+    "watch": "node build.js watch",
     "lint": "eslint --fix ./src/**/*.ts"
   }
 }
