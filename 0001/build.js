@@ -1,5 +1,6 @@
 const sltr = require("@fal-works/s-l-t-r");
 const builder = require("@fal-works/bundle-helper/lib/build/browser-app");
+const esbuild = require("@fal-works/bundle-helper/lib/use/esbuild");
 const watch = require("./scripts/watch");
 
 // ----------------------------------------------------------------------------
@@ -51,24 +52,31 @@ const buildConfig = {
   minifiedBannerContent,
 };
 
-const devConfig = {
-  ...config,
-  format: false,
-};
+const build = builder.command(buildConfig).rename("build");
 
-const build = builder.command(buildConfig);
-const dev = builder.command(devConfig);
+// const devConfig = {
+//   ...config,
+//   format: false,
+// };
+// const dev = builder.command(devConfig).rename("dev");
+
+const dev = sltr.seq(
+  esbuild.bundle.command(config)("iife").rename("dev"), // fast but unstable
+  esbuild.minify.commandFromConfig(config)("iife")
+);
 
 // ----------------------------------------------------------------------------
 
-const { run, cmdEx } = sltr;
+const startWatch = sltr.cmdEx(async () => {
+  sltr.config.setQuiet();
+  watch.createWatcher(() => sltr.run(dev));
+}, "watch");
+
+const router = sltr.tools.createRouter({
+  build,
+  dev,
+  watch: startWatch,
+});
+
 const CLI_ARG = process.argv[2];
-
-if (CLI_ARG === "watch") sltr.config.setQuiet();
-const startWatch = cmdEx(
-  async () => watch.createWatcher(() => run(dev)),
-  "watch"
-);
-
-const router = sltr.tools.createRouter({ build, dev, watch: startWatch }, dev);
 router.run(CLI_ARG);
